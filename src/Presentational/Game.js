@@ -1,50 +1,6 @@
 import React from 'react';
-import './App.css';
-
-// class Square extends React.Component {
-//   render() {
-//     return (
-//       <button className="square" onClick={() => this.props.onClick()}>
-//         {this.props.value}
-//       </button>
-//     );
-//   }
-// }
-/** Help compare class and function components (note the lack of parentheses on both sides) */
-function Square(props) {
-  return (
-    <button className="square" onClick={props.onClick}>
-      {props.value}
-    </button>
-  );
-}
-
-class Board extends React.Component {
-  renderSquare(i) {
-    return (
-      <Square
-        value={this.props.squares[i]}
-        onClick={() => this.props.onClick(i)}
-      />
-    )
-  }
-
-  render() {
-    return (
-      <div>
-        <div className="board-row">
-          {this.renderSquare(0)} {this.renderSquare(1)} {this.renderSquare(2)}
-        </div>
-        <div className="board-row">
-          {this.renderSquare(3)} {this.renderSquare(4)} {this.renderSquare(5)}
-        </div>
-        <div className="board-row">
-          {this.renderSquare(6)} {this.renderSquare(7)} {this.renderSquare(8)}
-        </div>
-      </div>
-    );
-  }
-}
+import Board from './Board.js'
+import '../index.css';
 
 export default class Game extends React.Component {
   constructor(props) {
@@ -62,8 +18,8 @@ export default class Game extends React.Component {
     const history = this.state.history.slice(0, this.state.stepNumber + 1);
     const current = history[history.length - 1];
     const squares = current.squares.slice();
-    //Have to check why end of following line
-    if (calculateWinner(squares)) {// || squares[i]) {
+    // || squares[i] to avoid error if clicking again on the same square
+    if (calculateWinner(squares) || squares[i]) {
       return;
     }
     squares[i] = this.state.xIsNext ? 'X' : 'O';
@@ -119,6 +75,7 @@ export default class Game extends React.Component {
   }
 }
 
+//this function calculates winner, lookin' at each move if a combination win exists
 function calculateWinner(squares) {
   const lines = [
     [0, 1, 2],
